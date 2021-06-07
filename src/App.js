@@ -1,25 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import {connect} from "react-redux";
 
-function App() {
+import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
+import './App.css';
+import {createMuiTheme, CssBaseline, MuiThemeProvider} from "@material-ui/core";
+
+// Components
+import Navbar from "./components/layouts/Navbar";
+import Home from "./components/pages/Home";
+
+// Styles
+import {useStyles} from "./css/styles";
+
+
+function App({theme: {theme}}) {
+  const classes = useStyles();
+  const {currentTheme} = theme;
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <MuiThemeProvider theme={createMuiTheme(currentTheme)}>
+      <div className={classes.root}>
+        <CssBaseline/>
+        <Router>
+          <Navbar />
+          <Switch>
+            <Route exact path="/" component={Home} />
+          </Switch>
+        </Router>
+      </div>
+    </MuiThemeProvider>
   );
 }
 
-export default App;
+const mapStateToProps = (state) => ({
+  theme: state.theme
+})
+
+export default connect(mapStateToProps)(App);
